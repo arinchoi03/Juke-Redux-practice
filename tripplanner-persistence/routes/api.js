@@ -29,3 +29,8 @@ router.get('/activities', function(req, res, next) {
 
 
 module.exports = router;
+
+// To get all the restaurant names:
+// $.get('/api/restaurants').
+// then(function(restaurants) {
+// restaurants.forEach(function(restaurant) {console.log(restaurant.name)} )}).catch(console.error.bind(console))

@@ -63,3 +63,6 @@ router.post('/api/hotels',
 			.catch(next))
 
 module.exports = router;
+
+// get all restaurant names from the 'api page'
+//$.get('/api').then(function(data){ data.restaurants.forEach(function(restaurant) { console.log(restaurant.name)})}).catch(console.error.bind(console))
