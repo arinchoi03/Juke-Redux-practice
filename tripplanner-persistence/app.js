@@ -5,6 +5,7 @@ var morgan = require('morgan');
 var nunjucks = require('nunjucks');
 var db = require('./models');
 var router = require('./routes');
+var apiRouter = require('./routes/api')
 
 
 var app = express();
@@ -22,7 +23,8 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
 app.use(morgan('dev'))
-app.use(router);
+app.use('/', router)
+app.use('/api', apiRouter);
 
 app.use(function(err, req, res, next) {
 	console.error(err)
