@@ -66,7 +66,7 @@ $(function initializeMap () {
   }
 
   // 0. Fetch the database, parsed from json to a js object
-  const db = fetch('/api').then(r => r.json())
+  const db = fetch("/api").then(r => r.json())
 
   // TODO:
   // 1. Populate the <select>s with <option>s

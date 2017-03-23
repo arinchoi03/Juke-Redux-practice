@@ -5,9 +5,8 @@ var morgan = require('morgan');
 var nunjucks = require('nunjucks');
 var db = require('./models');
 var router = require('./routes');
-//var apiRouter = require('./routes/api')
+var apiRouter = require('./routes/api')
 var daysRouter = require('./routes/api/days.js')
-
 
 var app = express();
 
@@ -25,6 +24,7 @@ app.use(bodyParser.json());
 
 app.use(morgan('dev'))
 app.use('/', router)
+app.use('/api', apiRouter)
 app.use('/api/days', daysRouter);
 
 app.use(function(err, req, res, next) {

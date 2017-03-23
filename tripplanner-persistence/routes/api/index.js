@@ -9,7 +9,7 @@ var Place = db.model('place');
 
 module.exports = router;
 
-router.get('/api', (req, res, next) =>
+router.get('/', (req, res, next) =>
 	Promise.props({
 		hotels: Hotel.findAll({ include: [Place] }),
 		restaurants: Restaurant.findAll({ include: [Place] }),
