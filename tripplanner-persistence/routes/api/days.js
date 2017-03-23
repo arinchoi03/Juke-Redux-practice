@@ -10,8 +10,6 @@ var Day = db.model('day');
 
 module.exports = router;
 
-
-
 router.get('/', function(req, res, next){
 	res.json({hello: 'world'});
 });

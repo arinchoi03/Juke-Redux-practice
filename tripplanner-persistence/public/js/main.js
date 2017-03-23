@@ -129,9 +129,16 @@ $(function initializeMap () {
       $(evt.target).before(
         $(`<ol class="current day"><h3><span class=day-head></span><button class=delDay>x</button></h3></ol>`)
       )
-
       numberDays()
+
+      $.ajax({
+        method: 'POST',
+        url: '/api/days'
+      })
+        .then(function (data) { console.log('POST response data: ', data) })
+        .catch(console.error.bind(console));
     }
+
   )
 
   function numberDays() {
@@ -139,6 +146,10 @@ $(function initializeMap () {
       $(day).find('.day-head').text(`day ${index + 1}`)
     )
   }
+
+  // function addDayToDb() {
+
+  // }
 
   // 5. Deal with switching days
   $(document).on('click', '.day-head',
