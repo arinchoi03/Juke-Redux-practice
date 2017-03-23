@@ -108,6 +108,17 @@ $(function initializeMap () {
 
           // Add this item to our itinerary for the current day
           $('.current.day').append(li)
+
+          var currentDay = $('.current.day').find('.day-head').data('num');
+          var hotelName = $('.current').find('li').text().slice(0,-2);
+          console.log(currentDay, hotelName);
+          $.post(`/api/days/${currentDay}/hotel`, {
+            hotel: hotelName,
+            //dayNumber: currentDay
+          })
+          .then(function (data) { console.log('POST response data: ', data) })
+          .catch(console.error.bind(console));
+
         })
   )
 
@@ -133,8 +144,8 @@ $(function initializeMap () {
       numberDays()
 
       //this saves the most recent day's value
-      var recentDayNum = $('#day-panel').find(':last-child').data('num')
-      console.log($('#day-panel.panel-body:last-child'))
+      var recentDayNum = $('#day-panel').find(".day-head").last().data('num')
+      console.log($('#day-panel').find(".day-head").last().data('num'));
 
       $.post('/api/days', {
         num: recentDayNum
@@ -148,7 +159,7 @@ $(function initializeMap () {
 
   function numberDays() {
     $('.day').each(function(index, day) {
-      $(day).find('.day-head').text(`day ${index + 1}`).data({'num': index +1})
+      $(day).find('.day-head').text(`day ${index + 1}`).data({'num': index + 1})
     })
   }
 

@@ -15,24 +15,63 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
-	console.log(req.body)
+	//console.log(req.body) 
 	Day.create({
 		number: req.body.num
 	}) //needs to make number property (null now)
 	.then(function(newDay) {
-		console.log('new day created!');
 		res.json(newDay.id);
 	})
 	.catch(next);
 });
 
 router.get('/:day', function(req, res, next){
-
 });
 
 router.delete('/:day', function(req, res, next){});
 
-router.post('/:day/hotel', function(req, res, next) {});
+router.post('/:day/hotel', function(req, res, next) {
+	var h = Hotel.find({ 
+		where: {
+			name: req.body.hotel
+		}
+	});
+
+	var d = Day.find({
+		where: {
+			number: req.params.day
+		}
+	})
+
+	Promise.all([h,d])
+	.spread(function(hotel, day) {
+		day.setHotel(hotel.id)
+	})
+	.catch(next)
+	// .then(function(hotel) {
+	// 	return Day.find({
+	// 		where: {
+	// 			number: req.params.day
+	// 		}
+	// 	})
+	// })
+	// .then(function(day) {
+	// 	day.
+	// })
+	// .catch(next);
+
+	// Day.find({
+	// 	where: {
+	// 		number: req.params.day
+	// 	}
+	// })
+	// .then(function(day) {
+	// 	day.setHotel(hotel);
+	// 	res.send('hotel added to day')
+	// })
+	// .catch(next);
+});
+
 router.delete('/:day/hotel', function(req, res, next) {});
 
 router.post('/:day/restaurants', function(req, res, next) {});
