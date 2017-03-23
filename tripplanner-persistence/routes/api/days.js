@@ -15,7 +15,7 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
-	//console.log(req.body) 
+	//console.log(req.body)
 	Day.create({
 		number: req.body.num
 	}) //needs to make number property (null now)
@@ -26,12 +26,26 @@ router.post('/', function(req, res, next){
 });
 
 router.get('/:day', function(req, res, next){
+	console.log(req.params.day)
+	Day.find({
+		where: {
+			id: req.params.day
+		},
+		include: [Hotel, Restaurant, Activity]
+	})
+	.then(function(daylist) {
+		var hotelName = daylist.hotel.name
+		var restNames = daylist.restaurants.map(rest=>rest.name)
+		var actNames = daylist.activities.map(act=>act.name)
+
+		res.json({hotel: hotelName, restaurants: restNames, activities: actNames})
+	})
 });
 
 router.delete('/:day', function(req, res, next){});
 
 router.post('/:day/hotel', function(req, res, next) {
-	var h = Hotel.find({ 
+	var h = Hotel.find({
 		where: {
 			name: req.body.hotel
 		}
@@ -74,11 +88,52 @@ router.post('/:day/hotel', function(req, res, next) {
 
 router.delete('/:day/hotel', function(req, res, next) {});
 
-router.post('/:day/restaurants', function(req, res, next) {});
-router.delete('/:day/restaurants', function(req, res, next) {});
+router.post('/:day/restaurant', function(req, res, next) {
+	var r = Restaurant.find({
+		where: {
+			name: req.body.restaurant,
+		}
+	})
 
-router.post('/:day/activities', function(req, res, next) {});
-router.delete('/:day/activities', function(req, res, next) {});
+	var d = Day.find({
+		where: {
+			number: req.params.day
+		}
+	})
+
+	Promise.all([r,d])
+	.spread(function(restaurant, day) {
+		return day.setRestaurants(restaurant.id)
+	})
+	.then(function(res){
+		console.log(res[1])
+	})
+	.catch(next)
+});
+
+router.delete('/:day/restaurant', function(req, res, next) {});
+
+router.post('/:day/activity',function(req, res, next) {
+	var a = Activity.find({
+		where: {
+			name: req.body.activity
+		}
+	});
+
+	var d = Day.find({
+		where: {
+			number: req.params.day
+		}
+	})
+
+	Promise.all([a,d])
+	.spread(function(activity, day) {
+		day.setActivities(activity.id)
+	})
+	.catch(next)
+});
+
+router.delete('/:day/activity', function(req, res, next) {});
 
 
 	//find day, and find foreign key of restuarant

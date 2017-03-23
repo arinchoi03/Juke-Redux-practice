@@ -100,6 +100,8 @@ $(function initializeMap () {
                   .closest('select')[0]
                   .dataset.type
 
+          console.log(type)
+
           // Make a li out of this item
           const li = $(`<li>${item.name} <button class='del'>x</button></li>`)[0]
 
@@ -109,17 +111,38 @@ $(function initializeMap () {
           // Add this item to our itinerary for the current day
           $('.current.day').append(li)
 
+          // capcturing current day and name of restaurant/activity/hotel
           var currentDay = $('.current.day').find('.day-head').data('num');
-          var hotelName = $('.current').find('li').text().slice(0,-2);
-          console.log(currentDay, hotelName);
-          $.post(`/api/days/${currentDay}/hotel`, {
-            hotel: hotelName,
-            //dayNumber: currentDay
-          })
+          var thingName = $('.current').find('li').text().slice(0,-2);
+
+          // checking type of itinerary item & sending ajax requests
+          if (type === 'hotels') {
+            $.post(`/api/days/${currentDay}/hotel`, {
+              hotel: thingName,
+              //dayNumber: currentDay
+            })
           .then(function (data) { console.log('POST response data: ', data) })
           .catch(console.error.bind(console));
 
-        })
+          } else if (type === 'restaurants') {
+            $.post(`/api/days/${currentDay}/restaurant`, {
+              restaurant: thingName,
+            })
+          .then(function (data) { console.log('POST response data: ', data) })
+          .catch(console.error.bind(console));
+
+          } else if (type === 'activities') {
+            $.post(`/api/days/${currentDay}/activity`, {
+              activity: thingName,
+            })
+          .then(function (data) { console.log('POST response data: ', data) })
+          .catch(console.error.bind(console));
+
+          } else {
+            throw new Error('incorrect type of thing!')
+          }
+
+        }) //each ends here
   )
 
   // 3. Wire up delete buttons
