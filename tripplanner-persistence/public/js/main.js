@@ -120,7 +120,7 @@ $(function initializeMap () {
   )
 
   // 4. Deal with adding days
-  $('button.addDay').click(
+  $('button.addDay').on('click',
     evt => {
       // Deselect all days
       $('.day.current').removeClass('current')
@@ -129,22 +129,27 @@ $(function initializeMap () {
       $(evt.target).before(
         $(`<ol class="current day"><h3><span class=day-head></span><button class=delDay>x</button></h3></ol>`)
       )
+
       numberDays()
 
-      $.ajax({
-        method: 'POST',
-        url: '/api/days'
+      //this saves the most recent day's value
+      var recentDayNum = $('#day-panel').find(':last-child').data('num')
+      console.log($('#day-panel.panel-body:last-child'))
+
+      $.post('/api/days', {
+        num: recentDayNum
       })
         .then(function (data) { console.log('POST response data: ', data) })
         .catch(console.error.bind(console));
-    }
 
+
+    }
   )
 
   function numberDays() {
-    $('.day').each((index, day) =>
-      $(day).find('.day-head').text(`day ${index + 1}`)
-    )
+    $('.day').each(function(index, day) {
+      $(day).find('.day-head').text(`day ${index + 1}`).data({'num': index +1})
+    })
   }
 
   // function addDayToDb() {
@@ -179,6 +184,6 @@ $(function initializeMap () {
       numberDays()
     })
 
-  // When we start, add a day
-  $('button.addDay').click()
+  // // When we start, add a day
+  // $('button.addDay').click()
 });

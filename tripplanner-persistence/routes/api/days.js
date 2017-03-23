@@ -15,12 +15,15 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
-	// Day.create({number: req.params.day})
-	// .then(function(newDay) {
-	// 	console.log('new day created!');
-	// 	res.send(newDay.id);
-	// })
-	// .catch(next);
+	console.log(req.body)
+	Day.create({
+		number: req.body.num
+	}) //needs to make number property (null now)
+	.then(function(newDay) {
+		console.log('new day created!');
+		res.json(newDay.id);
+	})
+	.catch(next);
 });
 
 router.get('/:day', function(req, res, next){
@@ -59,8 +62,8 @@ router.delete('/:day/activities', function(req, res, next) {});
 	// Restaurant.findAll({
 	// 	where: {
 
-	// 	}, 
+	// 	},
 	// 	{ include: [Day] }).then(function(restaurants) {
-	// 	
+	//
 	// })
 
